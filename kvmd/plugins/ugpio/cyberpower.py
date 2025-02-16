@@ -134,7 +134,7 @@ class Plugin(BaseUserGpioDriver):  # pylint: disable=too-many-instance-attribute
             if self.__state != prev_state:
                 get_logger(0).info("State changed: %s", self.__state)
                 self._notifier.notify()
-                prev_state = dict.fromkeys(self.__state)
+                prev_state = self.__state
             await self._notifier.wait(self.__state_poll)
 
     async def read(self, pin: str) -> bool:
