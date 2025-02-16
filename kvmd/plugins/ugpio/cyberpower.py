@@ -126,15 +126,11 @@ class Plugin(BaseUserGpioDriver):  # pylint: disable=too-many-instance-attribute
         get_logger(0).info("Probing driver %s on %s:%d ...", self, self.__host, self.__port)
 
     async def run(self) -> None:
-        prev_state: (dict | None) = None
         while True:
             for pin in self.__state:
                 await self.__update_power(pin)
 
-            if self.__state != prev_state:
-                get_logger(0).info("State changed: %s", self.__state)
-                self._notifier.notify()
-                prev_state = self.__state
+            self._notifier.notify()
             await self._notifier.wait(self.__state_poll)
 
     async def read(self, pin: str) -> bool:
